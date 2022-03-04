@@ -1,0 +1,13 @@
+.modal{
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    border: 1px solid #000;
+    width: 800px;
+    height:400px;
+    overflow-x:auto;
+
+    position:fixed;
+    top: 1;
+    margin-top:600px;
+}

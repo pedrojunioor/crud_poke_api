@@ -1,0 +1,23 @@
+.catalog{
+    width: 90%;
+    display:flex;
+    flex-direction: column;
+    margin: 10px 40px;
+}
+
+.catalog-filter{
+    width:90%;
+}
+
+.catalog-items{
+    display: flex;
+    justify-content: center;    
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    padding:80px;
+}
