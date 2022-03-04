@@ -13,11 +13,11 @@
     position: relative;
     z-index: 1;
     overflow: hidden;
-
+    
     &:hover {
         color: black;
     }
-
+    
     &:after {
         content: "";
         background: white;
@@ -30,7 +30,7 @@
         transform: skewX(-45deg) scale(0, 1);
         transition: all 0.5s;
     }
-
+    
     &:hover:after {
         transform: skewX(-45deg) scale(1, 1);
         -webkit-transition: all 0.5s;
@@ -40,6 +40,7 @@
 
 /* From cssbuttons.io by @alexroumi */
 .btn2 {
+    // width: 5em;
     padding: 15px 25px;
     border: unset;
     border-radius: 15px;
@@ -53,6 +54,7 @@
     box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
     transition: all 250ms;
     overflow: hidden;
+    text-align: center;
 
     &:before {
         content: "";

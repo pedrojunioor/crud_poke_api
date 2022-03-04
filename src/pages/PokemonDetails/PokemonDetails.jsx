@@ -15,7 +15,7 @@ export function PokemonDetails(){
     const pokeId = params.id;
 
     useEffect(() =>{
-        console.log('sffdfdfd')
+       
         if(pokemonSelected === undefined){
             api.get('pokemon/'+pokeId).then(result =>{
                 console.log(result)
