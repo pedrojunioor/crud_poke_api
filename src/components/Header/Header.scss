@@ -1,6 +1,6 @@
 .header {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin: 10px 20px;
     padding: 20px;
     align-items: center;
@@ -42,11 +42,42 @@
 .user-area {
     display: flex;
     align-items: center;
+    justify-content: center;
+
+    >span{
+        color: #fff;
+        font-size:16px;
+    }
 }
 
 .login-area {
+    margin-left: 30px;
+
+    
     .card-user {
         display: none;
+        border: 1px solid #ccc;
+        border-radius:20px;
+        background-color: #000;
+        opacity: 0.9;
+   
+
+        .form-login{
+            display: flex;
+            flex-direction: column; 
+            gap:10px,;
+            justify-content: center;
+            align-items: center;
+
+            >span{
+                color: #fff;
+                font-size:16px;
+            }
+            >input{
+                padding:8px;
+                border-radius:8px
+            }
+        }
     }
 
     display: flex;
@@ -58,10 +89,9 @@
             flex-direction: column;
             gap: 10px;
             padding: 20px;
-            // border: 1px solid #000;
             position: fixed;
-            margin-top: 22px;
-            margin-left: -60px;
+            margin-top: 25px;
+            margin-left: -100px;
             top: 1;
             left: 2;
         }
@@ -91,7 +121,7 @@
     background: red;
 
     height: 40px;
-    width: 100px;
+    // width: 100px;
 
     color: white;
     display: flex;
@@ -133,6 +163,8 @@ a {
     > span {
         padding: 0px 12px;
         font-size: 18px;
+        color:#fff;
+        text-align: center;
     }
 }
 
@@ -185,5 +217,22 @@ a {
     .input-area{
         display: flex;
         flex-direction: column
+    }
+}
+
+.form-login-cadastro{
+    display: flex;
+    flex-direction: column; 
+    gap:10px,;
+    justify-content: center;
+    align-items: center;
+
+    >span{
+        color: #fff;
+        font-size:16px;
+    }
+    >input{
+        padding:8px;
+        border-radius:8px
     }
 }

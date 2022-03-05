@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button } from '../Button/Button'
+import { Modal } from '../Modal/Modal'
 
 import './Header.scss'
 
@@ -7,19 +8,33 @@ import { Context } from '../../context/AuthContext'
 import { ContextPokedex } from '../../context/PokedexContext'
 import { Link, useHistory } from 'react-router-dom'
 import googleIcon from '../../assets/images/google-icon.svg'
-
 import logo from "../../assets/images/logo.png"
+import { User } from '../../assets/images/User'
+
 
 
 
 import listPokemons from '../../mocks/listPokemons.json'
 import listAbility from '../../mocks/listAbility.json'
+import { auth } from "../../services/firebase";
 
 export function Header() {
 
     const history = useHistory()
-    const { user, sigInWithGoogle, logout } = useContext(Context)
+    const { user, sigInWithGoogle, logout, handleNewAccount, handleLoginWithEmailAndPassword} = useContext(Context)
     const [filter, setFilter] = useState('name')
+
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    function toggleModal(e){
+        e.preventDefault()
+        setShowModal(!showModal)
+    }
+
+    const [showModal, setShowModal] = useState(false)
 
     const { field,
         setField,
@@ -102,8 +117,22 @@ export function Header() {
         </form>
     }
 
+    function createAcount(e,email,password,name) {
+        handleNewAccount(e,email,password,name)
+        console.log(user)
+        setName('')
+        setEmail('')
+        setPassword('')
+        setShowModal(false)
 
+    }
 
+    async function loginWithEmailAndPassword(e,email,password){
+        const user  = await handleLoginWithEmailAndPassword(e,email,password)
+        setEmail('')
+        setPassword('')
+    }
+  
 
     return (
         <div className="header">
@@ -115,7 +144,7 @@ export function Header() {
                 </Link>
             </div>
             <div className='input-radio'>
-                <div style={{display: 'flex'}}>
+                <div style={{ display: 'flex' }}>
                     <label htmlFor="name">Name</label>
                     <input
                         id="name"
@@ -124,7 +153,7 @@ export function Header() {
                         checked={filter === 'name' ? true : false} />
 
                 </div>
-                <div style={{display: 'flex'}}>
+                <div style={{ display: 'flex' }}>
                     <label htmlFor="ability-input">Ability</label>
                     <input
                         id="ability-input"
@@ -136,7 +165,94 @@ export function Header() {
             </div>
             {filter === 'name' ? mountInputName(listPokemons) : mountInputAbility(listAbility)}
 
-            <div className="user-area">
+            <div className="login-area">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <User width='25px' height='25px' />
+                </div>
+                <div className="card-user">
+                    <div>
+                        {!user && <div>
+                            <form className='form-login' onSubmit={e => loginWithEmailAndPassword(e,email,password)}>
+                                <span>Ja possui conta? </span>
+                                <input
+                                    type="text"
+                                    placeholder="email"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="password"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                />
+
+                                <Button type="submit" estilo='btn4'>LOGIN</Button>
+                                <span>Não possui? </span>
+                                <Button estilo='btn3' onClick={ e => toggleModal(e)} >Cadastre-se</Button>
+                                <span>ou</span>
+                            </form>
+                            <div>
+                            </div>
+                        </div>
+                        }
+                        <div className="user-area">
+                            {user && <div className="user">
+                                <img src={user?.avatar} alt="" />
+                                <span>{user?.name}</span>
+                            </div>}
+                            {!user && <button
+                                className="login-button"
+                                onClick={singIn}>
+                                <img src={googleIcon} alt="Logo do Google" />
+                                LOGIN
+                            </button>}
+                            {user && <button
+                                className="login-button"
+                                onClick={singOut}>
+                                <img src={googleIcon} alt="Logo do Google" />
+                                Logout
+                            </button>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {showModal &&
+                <Modal closeModal={e => toggleModal(e)}>
+                    <form className='form-login-cadastro' onSubmit={e => createAcount(e,email,password,name)}>
+                        <input
+                            type="text"
+                            placeholder="Name"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+
+                        />
+                        <input
+                            type="text"
+                            placeholder="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+
+                        />
+                        <input
+                            type="password"
+                            placeholder="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                        <Button type="submit" estilo='btn4'>Cadastrar</Button>
+                    </form>
+                </Modal>}
+
+            {/* <div className="user-area">
+                <div className="login-area">
+
+
+                </div>
+            </div> */}
+            {/* <div className="user-area">
                 <div className="login-area">
                     <div className="user-area">
                         {user && <div className="user">
@@ -158,7 +274,7 @@ export function Header() {
                     </div>
 
                 </div>
-            </div>
+            </div> */}
         </div >
     )
 }

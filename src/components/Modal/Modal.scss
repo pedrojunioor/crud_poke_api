@@ -1,12 +1,15 @@
 .modal{
     display: flex;
     flex-direction: column;
+    padding: 12px;
     z-index: 10;
     border: 1px solid #000;
-    width: 800px;
-    height:400px;
+    border-radius:20px;
+    width: 400px;
+    height:300px;
     overflow-x:auto;
-
+    background:#000;
+    // opacity: 0.9;
     position:fixed;
     top: 1;
     margin-top:600px;

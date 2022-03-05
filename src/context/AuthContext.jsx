@@ -1,10 +1,10 @@
-import React, { createContext, useEffect, useState} from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { auth, firebase } from '../services/firebase';
 
 const Context = createContext()
 
-function AuthProvider({children}) {
+function AuthProvider({ children }) {
 
     const history = useHistory()
     const [user, setUser] = useState()
@@ -24,7 +24,7 @@ function AuthProvider({children}) {
                     emaill: email
                 })
             }
-            else{
+            else {
                 setUser(undefined)
             }
         })
@@ -41,9 +41,6 @@ function AuthProvider({children}) {
         if (result.user) {
             const { displayName, photoURL, uid, email } = result.user
 
-            if (!displayName || !photoURL) {
-                throw new Error('Missing Information form Google Account')
-            }
             setUser({
                 id: uid,
                 name: displayName,
@@ -59,16 +56,52 @@ function AuthProvider({children}) {
     }
 
     function isLoggedIn() {
-        if(!user){
+        if (!user) {
             return false
         }
         return true
     }
 
-    
+    async function handleNewAccount(e, email, password, name) {
+        e.preventDefault();
+        const user = await auth.createUserWithEmailAndPassword(email, password)
+            .then(result => {
+                const user = firebase.auth().currentUser;
+                return user.updateProfile({
+                    displayName: name
+                })
+            })
+            .then(() => {
+                alert("Conta criada com sucesso")
+
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        return user
+    }
+
+    async function handleLoginWithEmailAndPassword(e, email, password) {
+        e.preventDefault()
+        const result = auth.signInWithEmailAndPassword(email, password).then(result => {
+            
+            if (result.user) {
+                const { displayName, uid, email } = result.user
+                setUser({
+                    id: uid,
+                    name: displayName,
+                    emaill: email
+                })
+                alert("Login efetuado com sucesso")
+            }
+        }).then(() => {
+        })
+    }
+
+
     return (
         <div>
-            <Context.Provider value={{ user, sigInWithGoogle, logout, isLoggedIn}}>
+            <Context.Provider value={{ user, sigInWithGoogle, logout, isLoggedIn, handleNewAccount, handleLoginWithEmailAndPassword }}>
                 {children}
             </Context.Provider>
         </div >
