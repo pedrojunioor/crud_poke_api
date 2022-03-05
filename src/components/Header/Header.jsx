@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import {Button} from '../Button/Button'
+import { Button } from '../Button/Button'
 
 import './Header.scss'
 
@@ -9,13 +9,21 @@ import { Link, useHistory } from 'react-router-dom'
 import googleIcon from '../../assets/images/google-icon.svg'
 
 import listPokemons from '../../mocks/listPokemons.json'
+import listAbility from '../../mocks/listAbility.json'
 
 export function Header() {
 
     const history = useHistory()
     const { user, sigInWithGoogle, logout } = useContext(Context)
+    const [filter, setFilter] = useState('name')
 
-    const { field, setField, handleGetPokemons, handleGetPokemonsWithFilter } = useContext(ContextPokedex)
+    const { field,
+        setField,
+        ability,
+        setAbility,
+        handleGetPokemons,
+        handleGetPokemonsByName,
+        handleGetPokemonsByAbility } = useContext(ContextPokedex)
 
     async function singIn() {
         if (!user) {
@@ -25,10 +33,17 @@ export function Header() {
     }
 
     useEffect(() => {
-        if(field.trim() === ''){
-            handleGetPokemons()
+        if (filter === 'name') {
+            if (field.trim() === '') {
+                handleGetPokemons()
+            }
         }
-    },[field])
+        else if(filter === 'ability'){
+            if (ability.trim() === '') {
+                handleGetPokemons()
+            } 
+        }
+    }, [field,ability])
 
     function singOut() {
         if (user) {
@@ -45,8 +60,8 @@ export function Header() {
         })
     }
 
-    function mountInput(lista) {
-        return <form onSubmit={e => handleGetPokemonsWithFilter(e, field)}>
+    function mountInputName(lista) {
+        return <form onSubmit={e => handleGetPokemonsByName(e, field)}>
             <div className="input-area">
                 <input
                     type="search"
@@ -56,15 +71,34 @@ export function Header() {
                     value={field}
                 />
                 {field.length > 0 &&
-                <datalist id="pokemons">
-                    {mountOptions(lista)}
-                </datalist>
+                    <datalist id="pokemons">
+                        {mountOptions(lista)}
+                    </datalist>
                 }
                 <Button estilo='btn3' type="submit">Buscar</Button>
             </div>
         </form>
-
     }
+
+    function mountInputAbility(lista) {
+        return <form onSubmit={e => handleGetPokemonsByAbility(e, ability)}>
+            <div className="input-area">
+                <input
+                    type="search"
+                    list="ability"
+                    placeholder="Ability"
+                    onInput={event => { setAbility(event.target.value) }}
+                    value={ability}
+                />
+                <datalist id="ability">
+                    {mountOptions(lista)}
+                </datalist>
+                <Button estilo='btn3' type="submit">Buscar</Button>
+            </div>
+        </form>
+    }
+
+
 
 
     return (
@@ -72,7 +106,28 @@ export function Header() {
             <div className="logo-area">
                 <Link to='/'>HOME</Link>
             </div>
-            {mountInput(listPokemons)}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div>
+                    <label htmlFor="name">Name</label>
+                    <input
+                        id="name"
+                        type="radio"
+                        onChange={() => setFilter('name')}
+                        checked={filter === 'name' ? true : false} />
+
+                </div>
+                <div>
+                    <label htmlFor="ability-input">Ability</label>
+                    <input
+                        id="ability-input"
+                        type="radio"
+                        checked={filter === 'ability' ? true : false}
+                        onChange={() => setFilter('ability')} />
+                </div>
+
+            </div>
+            {filter === 'name' ? mountInputName(listPokemons) : mountInputAbility(listAbility)}
+
             <div className="user-area">
                 <div className="login-area">
                     <div className="user-area">
