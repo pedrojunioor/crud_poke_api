@@ -8,6 +8,10 @@ import { ContextPokedex } from '../../context/PokedexContext'
 import { Link, useHistory } from 'react-router-dom'
 import googleIcon from '../../assets/images/google-icon.svg'
 
+import logo from "../../assets/images/logo.png"
+
+
+
 import listPokemons from '../../mocks/listPokemons.json'
 import listAbility from '../../mocks/listAbility.json'
 
@@ -38,12 +42,12 @@ export function Header() {
                 handleGetPokemons()
             }
         }
-        else if(filter === 'ability'){
+        else if (filter === 'ability') {
             if (ability.trim() === '') {
                 handleGetPokemons()
-            } 
+            }
         }
-    }, [field,ability])
+    }, [field, ability])
 
     function singOut() {
         if (user) {
@@ -104,10 +108,14 @@ export function Header() {
     return (
         <div className="header">
             <div className="logo-area">
-                <Link to='/'>HOME</Link>
+                <Link to='/'>
+                    <div className="logo-img" >
+                        <img src={logo} />
+                    </div>
+                </Link>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div>
+            <div className='input-radio'>
+                <div style={{display: 'flex'}}>
                     <label htmlFor="name">Name</label>
                     <input
                         id="name"
@@ -116,7 +124,7 @@ export function Header() {
                         checked={filter === 'name' ? true : false} />
 
                 </div>
-                <div>
+                <div style={{display: 'flex'}}>
                     <label htmlFor="ability-input">Ability</label>
                     <input
                         id="ability-input"
