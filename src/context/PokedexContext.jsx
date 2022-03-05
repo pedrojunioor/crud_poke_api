@@ -12,12 +12,17 @@ function PokedexContext({ children }) {
 
     const [next,setNext] = useState('')
     const [previous,setPrevious] = useState('')
+    const [field, setField] = useState('')
 
     useEffect(() => {
         if (pokemons === undefined) {
             handleGetPokemons()
         }
     })
+
+    useEffect(() => {
+        console.log('AQUi',pokemons)
+    },[pokemons])
 
     async function handleGetPokemons(){
         api.get('pokemon').then(result => {
@@ -27,6 +32,34 @@ function PokedexContext({ children }) {
         }).catch(error=>{
             console.error(error)
         })
+    }
+    async function handleGetPokemonsWithFilter(event,string){
+        event.preventDefault()
+        if(string.trim() === ''){
+            api.get('pokemon').then(result => {
+                setPokemons(result.data.results)
+                setNext(result.data.next)
+                setPrevious(result.data.previous)
+            }).catch(error=>{
+                console.error(error)
+            })
+        }
+        else{
+            console.log('https://pokeapi.co/api/v2/'+'pokemon/'+string)
+            let pokemon = []
+            api.get('pokemon/'+string).then(result => {
+                console.log(result.data)
+                pokemon.push({
+                    id: result.data.id,
+                    url: result.data.name
+                })
+                setPokemons(pokemon)
+                setNext(undefined)
+                setPrevious(undefined)
+            }).catch(error=>{
+                console.error(error)
+            })
+        }  
     }
 
     async function handlePageNext(){
@@ -56,10 +89,13 @@ function PokedexContext({ children }) {
             next,
             previous,
             pokemonSelected,
+            field,
             handleGetPokemons,
             handlePageNext,
             handlePagePrevious,
-            setPokemonSelected
+            setPokemonSelected,
+            setField,
+            handleGetPokemonsWithFilter
         }}>
             {children}
         </ContextPokedex.Provider>

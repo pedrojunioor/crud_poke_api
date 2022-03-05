@@ -17,9 +17,17 @@ export function Catalog() {
 
     function showPokemons() {
         return pokemons.map((pokemon, i) => {
-            return <div key={i} onClick={() => history.push(`/pokemon/${pokemon.url.split('/')[6]}`)}>
-                <Card pokemon={pokemon}></Card>
+            return <div key={i} style={{display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center'}}>
+                <div onClick={() => history.push(`/pokemon/${pokemon.url.split('/')[6]}`)}>
+                    <Card pokemon={pokemon}></Card>
+                </div>
+                <div className="add-to-deck">
+                    <Button estilo='btn2' onClick={() => console.log('ADD',pokemon.url.split('/')[6])}>Add To Deck</Button>
+                </div>
+
+
             </div>
+
         })
     }
 

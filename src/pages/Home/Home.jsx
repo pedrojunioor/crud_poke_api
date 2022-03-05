@@ -1,5 +1,7 @@
 import React, { useState, useEffect,useContext } from "react";
 import { Header } from "../../components/Header/Header"
+
+import api from '../../config/api'
 import {Catalog} from '../../components/Catalog/Catalog'
 import { collection, addDoc, getDocs } from "firebase/firestore";
 
@@ -54,11 +56,16 @@ export function Home() {
     //     handleGetUser(users)
     // }
 
+    function getAll(){
+        api.get('pokemon?limit=1126').then(result => {
+            console.log(result.data);
+        })
+    }
+
     return (
         <div>
             <Header />
             <Catalog/>
-
         </div>
     )
 }

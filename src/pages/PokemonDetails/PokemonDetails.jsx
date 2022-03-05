@@ -18,7 +18,7 @@ export function PokemonDetails(){
        
         if(pokemonSelected === undefined){
             api.get('pokemon/'+pokeId).then(result =>{
-                console.log(result)
+                // console.log(result)
                 setPokemonSelected(result.data)
             })
         }
