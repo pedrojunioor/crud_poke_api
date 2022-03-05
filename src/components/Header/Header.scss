@@ -169,7 +169,21 @@ a {
     }
 
     .user-area{
+        display: flex;
+        margin-left: -1000;
         order: -1
+
     }
 
+}
+
+@media(max-width: 425px){
+    .header{
+        justify-content:center;
+        align-items:center;
+    }
+    .input-area{
+        display: flex;
+        flex-direction: column
+    }
 }
