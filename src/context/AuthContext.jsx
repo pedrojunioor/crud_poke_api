@@ -2,6 +2,10 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { auth, firebase } from '../services/firebase';
 
+import { collection, addDoc, getDocs } from "firebase/firestore";
+
+import { database } from '../services/firebase'
+
 const Context = createContext()
 
 function AuthProvider({ children }) {
@@ -9,14 +13,34 @@ function AuthProvider({ children }) {
     const history = useHistory()
     const [user, setUser] = useState()
 
+
+    async function getUsers() {
+        const querySnapshot = await getDocs(collection(database, "users"));
+        let users = []
+        querySnapshot.forEach((doc) => {
+            users.push(JSON.parse(JSON.stringify(doc.data())).email)
+        });
+        return users
+    }
+
+    async function persistUser(user) {
+        console.log('user', user)
+        try {
+            const docRef = await addDoc(collection(database, "users"), {
+                id: user.id,
+                name: user.name,
+                email: user.emaill
+            });
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    }
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 const { displayName, photoURL, uid, email } = user
-
-                if (!displayName || !photoURL) {
-                    throw new Error('Missing Information form Google Account')
-                }
                 setUser({
                     id: uid,
                     name: displayName,
@@ -47,6 +71,16 @@ function AuthProvider({ children }) {
                 avatar: photoURL,
                 emaill: email
             })
+            let emails = await getUsers()
+
+            if (!(emails.includes(`${email}`))) {
+                persistUser({
+                    id: uid,
+                    name: displayName,
+                    emaill: email
+                })
+            }
+
         }
     }
 
@@ -71,8 +105,19 @@ function AuthProvider({ children }) {
                     displayName: name
                 })
             })
-            .then(() => {
+            .then(async () => {
                 alert("Conta criada com sucesso")
+                let emails = await getUsers()
+                console.log('emails', emails)
+
+                if (!(emails.includes(`${email}`))) {
+                    const user = firebase.auth().currentUser;
+                    persistUser({
+                        id: user.uid,
+                        name: user.displayName,
+                        emaill: user.email
+                    })
+                }
 
             })
             .catch((error) => {
@@ -84,7 +129,7 @@ function AuthProvider({ children }) {
     async function handleLoginWithEmailAndPassword(e, email, password) {
         e.preventDefault()
         const result = auth.signInWithEmailAndPassword(email, password).then(result => {
-            
+
             if (result.user) {
                 const { displayName, uid, email } = result.user
                 setUser({

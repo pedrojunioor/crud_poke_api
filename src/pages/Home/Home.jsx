@@ -15,20 +15,6 @@ import {ContextPokedex} from '../../context/PokedexContext'
 export function Home() {
 
     
-    // async function teste() {
-    //     console.log('ENTROU')
-    //     try {
-    //         const docRef = await addDoc(collection(database, "users"), {
-    //             first: "Ada",
-    //             last: "Lovelace",
-    //             born: 1815
-    //         });
-    //         console.log("Document written with ID: ", docRef.id);
-    //     } catch (e) {
-    //         console.error("Error adding document: ", e);
-    //     }
-    // }
-
 
     // const [users, setUsers] = useState([])
 
@@ -46,15 +32,7 @@ export function Home() {
     //     }
     // }, [users])
 
-    // async function getUsers() {
-    //     const querySnapshot = await getDocs(collection(database, "users"));
-    //     let users = []
-    //     querySnapshot.forEach((doc) => {
-    //         users.push(JSON.stringify(doc.data()))
-    //     });
-    //     // console.log('NA FUNCAO',users)
-    //     handleGetUser(users)
-    // }
+  
 
     function getAll(){
         api.get('pokemon?limit=1126').then(result => {
@@ -64,7 +42,7 @@ export function Home() {
 
     return (
         <div>
-            <Header />
+            <Header home={true} />
             <Catalog/>
         </div>
     )

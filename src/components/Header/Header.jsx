@@ -18,10 +18,10 @@ import listPokemons from '../../mocks/listPokemons.json'
 import listAbility from '../../mocks/listAbility.json'
 import { auth } from "../../services/firebase";
 
-export function Header() {
+export function Header(home) {
 
     const history = useHistory()
-    const { user, sigInWithGoogle, logout, handleNewAccount, handleLoginWithEmailAndPassword} = useContext(Context)
+    const { user, sigInWithGoogle, logout, handleNewAccount, handleLoginWithEmailAndPassword } = useContext(Context)
     const [filter, setFilter] = useState('name')
 
     const [name, setName] = useState('')
@@ -29,7 +29,7 @@ export function Header() {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    function toggleModal(e){
+    function toggleModal(e) {
         e.preventDefault()
         setShowModal(!showModal)
     }
@@ -117,8 +117,8 @@ export function Header() {
         </form>
     }
 
-    function createAcount(e,email,password,name) {
-        handleNewAccount(e,email,password,name)
+    function createAcount(e, email, password, name) {
+        handleNewAccount(e, email, password, name)
         console.log(user)
         setName('')
         setEmail('')
@@ -127,15 +127,16 @@ export function Header() {
 
     }
 
-    async function loginWithEmailAndPassword(e,email,password){
-        const user  = await handleLoginWithEmailAndPassword(e,email,password)
+    async function loginWithEmailAndPassword(e, email, password) {
+        const user = await handleLoginWithEmailAndPassword(e, email, password)
         setEmail('')
         setPassword('')
     }
-  
+
 
     return (
         <div className="header">
+          
             <div className="logo-area">
                 <Link to='/'>
                     <div className="logo-img" >
@@ -143,27 +144,31 @@ export function Header() {
                     </div>
                 </Link>
             </div>
-            <div className='input-radio'>
-                <div style={{ display: 'flex' }}>
-                    <label htmlFor="name">Name</label>
-                    <input
-                        id="name"
-                        type="radio"
-                        onChange={() => setFilter('name')}
-                        checked={filter === 'name' ? true : false} />
+            {home.home &&
+                <div className='input-radio'>
+                    <div style={{ display: 'flex' }}>
+                        <label htmlFor="name">Name</label>
+                        <input
+                            id="name"
+                            type="radio"
+                            onChange={() => setFilter('name')}
+                            checked={filter === 'name' ? true : false} />
 
+                    </div>
+                    <div style={{ display: 'flex' }}>
+                        <label htmlFor="ability-input">Ability</label>
+                        <input
+                            id="ability-input"
+                            type="radio"
+                            checked={filter === 'ability' ? true : false}
+                            onChange={() => setFilter('ability')} />
+                    </div>
                 </div>
-                <div style={{ display: 'flex' }}>
-                    <label htmlFor="ability-input">Ability</label>
-                    <input
-                        id="ability-input"
-                        type="radio"
-                        checked={filter === 'ability' ? true : false}
-                        onChange={() => setFilter('ability')} />
-                </div>
+            }
+            {home.home &&
+                (filter === 'name' ? mountInputName(listPokemons) : mountInputAbility(listAbility))
+            }
 
-            </div>
-            {filter === 'name' ? mountInputName(listPokemons) : mountInputAbility(listAbility)}
 
             <div className="login-area">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -172,7 +177,7 @@ export function Header() {
                 <div className="card-user">
                     <div>
                         {!user && <div>
-                            <form className='form-login' onSubmit={e => loginWithEmailAndPassword(e,email,password)}>
+                            <form className='form-login' onSubmit={e => loginWithEmailAndPassword(e, email, password)}>
                                 <span>Ja possui conta? </span>
                                 <input
                                     type="text"
@@ -190,7 +195,7 @@ export function Header() {
 
                                 <Button type="submit" estilo='btn4'>LOGIN</Button>
                                 <span>Não possui? </span>
-                                <Button estilo='btn3' onClick={ e => toggleModal(e)} >Cadastre-se</Button>
+                                <Button estilo='btn3' onClick={e => toggleModal(e)} >Cadastre-se</Button>
                                 <span>ou</span>
                             </form>
                             <div>
@@ -221,7 +226,7 @@ export function Header() {
 
             {showModal &&
                 <Modal closeModal={e => toggleModal(e)}>
-                    <form className='form-login-cadastro' onSubmit={e => createAcount(e,email,password,name)}>
+                    <form className='form-login-cadastro' onSubmit={e => createAcount(e, email, password, name)}>
                         <input
                             type="text"
                             placeholder="Name"
@@ -245,36 +250,6 @@ export function Header() {
                         <Button type="submit" estilo='btn4'>Cadastrar</Button>
                     </form>
                 </Modal>}
-
-            {/* <div className="user-area">
-                <div className="login-area">
-
-
-                </div>
-            </div> */}
-            {/* <div className="user-area">
-                <div className="login-area">
-                    <div className="user-area">
-                        {user && <div className="user">
-                            <img src={user?.avatar} alt="" />
-                            <span>{user?.name}</span>
-                        </div>}
-                        {!user && <button
-                            className="login-button"
-                            onClick={singIn}>
-                            <img src={googleIcon} alt="Logo do Google" />
-                            Login
-                        </button>}
-                        {user && <button
-                            className="login-button"
-                            onClick={singOut}>
-                            <img src={googleIcon} alt="Logo do Google" />
-                            Logout
-                        </button>}
-                    </div>
-
-                </div>
-            </div> */}
         </div >
     )
 }

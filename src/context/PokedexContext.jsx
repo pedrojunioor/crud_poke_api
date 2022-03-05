@@ -21,10 +21,6 @@ function PokedexContext({ children }) {
         }
     })
 
-    useEffect(() => {
-        console.log('AQUi', pokemons)
-    }, [pokemons])
-
     async function handleGetPokemons() {
         api.get('pokemon').then(result => {
             setPokemons(result.data.results)
