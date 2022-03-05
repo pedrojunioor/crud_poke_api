@@ -4,6 +4,10 @@
     margin: 10px 20px;
     padding: 20px;
     align-items: center;
+
+    > form {
+        width: 60%;
+    }
 }
 
 .logo-area {
@@ -16,15 +20,26 @@
 .input-area {
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
+    gap: 20px;
     > input {
         width: 100%;
         height: 40px;
         border-radius: 8px;
+        padding-left: 20px;
     }
+
+    > datalist {
+        width: 100%;
+        height: 40px;
+        border-radius: 8px;
+        padding-left: 20px;
+    }
+    
 }
 
-.user-area{
+.user-area {
     display: flex;
     align-items: center;
 }
@@ -53,10 +68,10 @@
     }
 }
 
-.template-catalogue{
+.template-catalogue {
     grid-area: header;
 }
-.catalogue-header{
+.catalogue-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -64,65 +79,73 @@
     padding: 20px;
     border-radius: 1%;
     border-bottom: 1px solid;
-    >span{
-        font: 400 32px 'Roboto', sans-serif!important;
+    > span {
+        font: 400 32px "Roboto", sans-serif !important;
     }
-        
-
 }
 
-.login-button{
-         height: 50px;
-         border-radius: 8px;
-         font-weight: 500;
-         background: red;
+.login-button {
+    height: 50px;
+    border-radius: 8px;
+    font-weight: 500;
+    background: red;
 
-         height:40px;
-         width: 100px;
+    height: 40px;
+    width: 100px;
 
-         color: white;
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         margin-right: 20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
 
-         cursor: pointer;
-         border: 0;
-         gap: 10px;
+    cursor: pointer;
+    border: 0;
+    gap: 10px;
 }
-span{
+span {
     font-size: 30px;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-.user-area{
-    display:flex;
-    justify-content:center;
+.user-area {
+    display: flex;
+    justify-content: center;
     align-items: center;
-
 }
-.user{
-    display:flex;
+.user {
+    display: flex;
     flex-direction: column;
-    justify-content:center;
+    justify-content: center;
     align-items: center;
     // border: 2px solid #ccc;
     border-radius: 5%;
-    
-    
-    >img{
-        border:2px solid #ccc;
+
+    > img {
+        border: 2px solid #ccc;
         border-radius: 50%;
-        width:35px;
+        width: 35px;
         height: 35px;
-      
     }
-    > span{
+    > span {
         padding: 0px 12px;
         font-size: 18px;
     }
 }
 
+// ::-webkit-scrollbar {
+//     width: 12px; /* width of the entire scrollbar */
+// }
+
+// ::-webkit-scrollbar-track {
+//     background: orange; /* color of the tracking area */
+// }
+
+// ::-webkit-scrollbar-thumb {
+//     background-color: blue; /* color of the scroll thumb */
+//     border-radius: 20px; /* roundness of the scroll thumb */
+//     border: 3px solid orange; /* creates padding around scroll thumb */
+// }

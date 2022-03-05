@@ -45,13 +45,12 @@ function PokedexContext({ children }) {
             })
         }
         else{
-            console.log('https://pokeapi.co/api/v2/'+'pokemon/'+string)
             let pokemon = []
             api.get('pokemon/'+string).then(result => {
-                console.log(result.data)
+                console.log('RESULTADO',result.data)
                 pokemon.push({
-                    id: result.data.id,
-                    url: result.data.name
+                    name: result.data.name,
+                    url: 'https://pokeapi.co/api/v2/pokemon/'+result.data.id+'/'
                 })
                 setPokemons(pokemon)
                 setNext(undefined)
