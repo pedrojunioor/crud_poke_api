@@ -6,7 +6,7 @@ import history from './history'
 
 import {Home} from './pages/Home/Home'
 import { PokemonDetails } from "./pages/PokemonDetails/PokemonDetails";
-
+import { Decks } from "./pages/Decks/Decks";
 
 export function AppRoutes() {
 
@@ -30,6 +30,7 @@ export function AppRoutes() {
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/pokemon/:id" component={PokemonDetails} />
+                <Route exact path="/:id/decks" component={Decks} />
             </Switch>
         </Router>
     )

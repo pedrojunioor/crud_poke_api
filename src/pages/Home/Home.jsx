@@ -32,13 +32,21 @@ export function Home() {
     //     }
     // }, [users])
 
-  
+    // async function getUsers() {
+    //     const querySnapshot = await getDocs(collection(database, "users"));
+    //     let users = []
+    //     querySnapshot.forEach((doc) => {
+    //         users.push(JSON.stringify(doc.data()))
+    //     });
+    //     // console.log('NA FUNCAO',users)
+    //     handleGetUser(users)
+    // }
 
-    function getAll(){
-        api.get('pokemon?limit=1126').then(result => {
-            console.log(result.data);
-        })
-    }
+    // function getAll(){
+    //     api.get('pokemon?limit=1126').then(result => {
+    //         console.log(result.data);
+    //     })
+    // }
 
     return (
         <div>

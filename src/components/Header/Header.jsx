@@ -136,13 +136,17 @@ export function Header(home) {
 
     return (
         <div className="header">
-          
+
             <div className="logo-area">
                 <Link to='/'>
                     <div className="logo-img" >
                         <img src={logo} />
                     </div>
                 </Link>
+                {user &&
+
+                    <Link to={`/${user.id}/decks`}>Deck</Link>
+                }
             </div>
             {home.home &&
                 <div className='input-radio'>

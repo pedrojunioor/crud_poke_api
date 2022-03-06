@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { auth, firebase } from '../services/firebase';
 
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, setDoc, addDoc,doc, getDocs } from "firebase/firestore";
 
 import { database } from '../services/firebase'
 
@@ -24,13 +24,21 @@ function AuthProvider({ children }) {
     }
 
     async function persistUser(user) {
-        console.log('user', user)
+        console.log(user)
+
         try {
-            const docRef = await addDoc(collection(database, "users"), {
-                id: user.id,
+            const userRef = collection(database, "users")
+
+            const docRef = await setDoc(doc(userRef, `${user.id}`), {
                 name: user.name,
-                email: user.emaill
+                email: user.emaill,
+                decks: []
             });
+            // const docRef = await addDoc(collection(database, "users"), {
+            //     id: user.id,
+            //     name: user.name,
+            //     email: user.emaill
+            // });
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
             console.error("Error adding document: ", e);
