@@ -1,0 +1,37 @@
+.decks-layout{
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.decks {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction:column;
+}
+
+.card-layout{
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card-area{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 8px;
+    padding:8px
+}
+.deck{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    padding:8px;
+    margin:0 4px;
+}

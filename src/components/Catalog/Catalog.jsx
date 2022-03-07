@@ -8,17 +8,23 @@ import { Modal } from '../Modal/Modal'
 
 import { collection, doc, setDoc, addDoc, getDocs, getDoc, updateDoc } from "firebase/firestore";
 import { database, auth, firebase } from '../../services/firebase'
-// import {auth} from '../../services/firebase'
+
 import './Catalog.scss';
 
 
 export function Catalog() {
 
     const { pokemons, next, previous, handleGetPokemons, handlePageNext, handlePagePrevious } = useContext(ContextPokedex)
+    const [decks, setDecks] = useState([])
 
     const { user } = useContext(Context)
-
     const history = useHistory();
+
+    const [showModalAdd,setShowModalAdd] = useState(false)
+
+    function toggleModalAdd(){
+        setShowModalAdd(!showModalAdd)
+    }
 
     function isEquals(obj1, obj2) {
         if (obj1.url === obj2.url && obj1.name === obj2.name) {
@@ -34,9 +40,6 @@ export function Catalog() {
     async function addDeck(pokemon, deck) {
 
         const user = await firebase.auth().currentUser;
-        console.log('USER', user.uid)
-        console.log('POKEMON', pokemon)
-
 
         try {
 
@@ -73,6 +76,38 @@ export function Catalog() {
         }
     }
 
+    async function getDecks() {
+
+        const user = await firebase.auth().currentUser;
+        console.log('UUUUu',user.uid)
+
+        const docRef = doc(database, "users", `${user.uid}`);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            setDecks(docSnap.data().decks)
+        } else {
+            console.log("No such document!");
+        }
+    }
+
+    function chooseDeck(e,pokemon){
+        toggleModalAdd(e)
+        getDecks()
+        let ArrayDecks = []
+        console.log('DECK', decks)
+        // if(de)
+        Object.entries(decks[0]).forEach(item => {
+            ArrayDecks.push(item[1])
+        })
+        console.log('AQUI',ArrayDecks)
+        
+    }
+
+    useEffect(() => {
+        console.log(showModalAdd)
+    },[showModalAdd])
+
 
     function showPokemons() {
         return pokemons.map((pokemon, i) => {
@@ -82,11 +117,9 @@ export function Catalog() {
                 </div>
                 {user && <div className="add-to-deck">
                     {/* <Button estilo='btn2' onClick={() => console.log('ADD',pokemon.url.split('/')[6])}>Add To Deck</Button> */}
-                    <Button estilo='btn2' onClick={() => addDeck(pokemon, 'deck4')}>Add To Deck</Button>
+                    <Button estilo='btn2' onClick={e => {showModalAdd === false && chooseDeck(e,pokemon)}}>Add To Deck</Button>
                 </div>
                 }
-
-
             </div>
 
         })
@@ -97,6 +130,35 @@ export function Catalog() {
             <div className="catalog-items">
                 {pokemons && showPokemons()}
             </div>
+            {showModalAdd &&
+                <Modal closeModal={e => toggleModalAdd(e)}>
+                    <div>
+                        dfldkflsdfdf
+                    </div>
+                    {/* <form className='form-login-cadastro' onSubmit={e => createAcount(e, email, password, name)}>
+                        <input
+                            type="text"
+                            placeholder="Name"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+
+                        />
+                        <input
+                            type="text"
+                            placeholder="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+
+                        />
+                        <input
+                            type="password"
+                            placeholder="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                        <Button type="submit" estilo='btn4'>Cadastrar</Button>
+                    </form> */}
+                </Modal>}
             <div className="pagination">
                 {previous && <Button estilo='btn1' onClick={handlePagePrevious}> Previous  </Button>}
                 {next && <Button estilo='btn1' onClick={handlePageNext}> Next  </Button>}

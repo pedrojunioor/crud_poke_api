@@ -1,9 +1,14 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { collection, doc,setDoc, addDoc, getDocs, getDoc, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, addDoc, getDocs, getDoc, query, where } from "firebase/firestore";
 import { database, auth, firebase } from '../../services/firebase'
 
+import { Card } from '../../components/Card/Card'
+import { Header } from '../../components/Header/Header'
+import { Button } from '../../components/Button/Button'
+
+import './Decks.scss'
 
 export function Decks() {
 
@@ -11,9 +16,9 @@ export function Decks() {
 
     const userId = params.id
 
-    const [decks,setDecks] = useState([])
+    const [decks, setDecks] = useState([])
 
-    function handleDecks(data){
+    function handleDecks(data) {
         setDecks([
             ...decks,
             data
@@ -22,24 +27,61 @@ export function Decks() {
 
     useEffect(() => {
         getDecks()
-    },[])
+    }, [userId])
 
     async function getDecks() {
-        const docRef = doc(database, "users",`${userId}`);
+        const docRef = doc(database, "users", `${userId}`);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             console.log("Document data:", docSnap.data());
             setDecks(docSnap.data().decks)
         } else {
-            // doc.data() will be undefined in this case
             console.log("No such document!");
         }
     }
 
+    function showDecksNaTela(decks) {
+        let ArrayDecks = []
+        Object.entries(decks[0]).forEach(item => {
+            ArrayDecks.push(item[1])
+        })
+        if (ArrayDecks.length > 0) {
+            return ArrayDecks.map((item, i) => {
+                return <div className="card-layout">
+                    <div style={{ marginBottom: '20px' }}>
+                        <h1>{`Deck ${i + 1}`}</h1>
+
+                    </div>
+                    <div className="deck" >
+                        <div style={{display: 'flex', flexWrap:"wrap"}}>
+                            {showDeck(item)}
+                        </div>
+                        <Button estilo='btn5'>EXCLUIR DECK</Button>
+                    </div>
+                </div>
+            })
+        }
+    }
+
+    function showDeck(deck) {
+        return deck.map((item, i) => {
+            return <div className="deck">
+                    <Card pokemon={item} />
+                    <Button estilo='btn5'>Remover do Deck</Button>
+            </div>
+        })
+
+    }
+
     return (
-        <div>
-            {JSON.stringify(decks)}
-           
+        <div className="decks-layout">
+            <Header home={false} />
+            <div >
+                <div className="decks">
+                    {decks.length > 0 &&
+                        showDecksNaTela(decks)}
+                </div>
+            </div>
         </div>
     )
 }
