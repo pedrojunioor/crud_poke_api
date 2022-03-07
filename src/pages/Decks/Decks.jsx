@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 
 import { collection, doc, setDoc, addDoc, getDocs, getDoc, query, where } from "firebase/firestore";
 import { database, auth, firebase } from '../../services/firebase'
@@ -13,8 +13,19 @@ import './Decks.scss'
 export function Decks() {
 
     const params = useParams()
+    const history = useHistory()
 
     const userId = params.id
+
+    useEffect(() => {
+        // console.log
+        if (firebase.auth().currentUser !== undefined ) {
+
+            if (firebase.auth().currentUser.uid !== userId) {
+                history.push('/')
+            }
+        }
+    }, [firebase.auth().currentUser, userId])
 
     const [decks, setDecks] = useState([])
 
@@ -47,18 +58,21 @@ export function Decks() {
         })
         if (ArrayDecks.length > 0) {
             return ArrayDecks.map((item, i) => {
-                return <div className="card-layout">
-                    <div style={{ marginBottom: '20px' }}>
-                        <h1>{`Deck ${i + 1}`}</h1>
+                if (item.length > 0) {
+                    return <div className="card-layout">
+                        <div style={{ marginBottom: '20px' }}>
+                            <h1>{`Deck ${i + 1}`}</h1>
 
-                    </div>
-                    <div className="deck" >
-                        <div style={{display: 'flex', flexWrap:"wrap"}}>
-                            {showDeck(item)}
                         </div>
-                        <Button estilo='btn5'>EXCLUIR DECK</Button>
+                        <div className="deck" >
+                            <div style={{ display: 'flex', flexWrap: "wrap" }}>
+                                {showDeck(item)}
+                            </div>
+                            <Button estilo='btn5'>EXCLUIR DECK</Button>
+                        </div>
                     </div>
-                </div>
+                }
+
             })
         }
     }
@@ -66,8 +80,9 @@ export function Decks() {
     function showDeck(deck) {
         return deck.map((item, i) => {
             return <div className="deck">
-                    <Card pokemon={item} />
-                    <Button estilo='btn5'>Remover do Deck</Button>
+
+                <Card pokemon={item} />
+                <Button estilo='btn5'>Remover do Deck</Button>
             </div>
         })
 
@@ -78,8 +93,9 @@ export function Decks() {
             <Header home={false} />
             <div >
                 <div className="decks">
-                    {decks.length > 0 &&
-                        showDecksNaTela(decks)}
+                    {decks.length > 0 ?
+                        showDecksNaTela(decks) :
+                        <h1>Você ainda não possui nenhum Deck</h1>}
                 </div>
             </div>
         </div>

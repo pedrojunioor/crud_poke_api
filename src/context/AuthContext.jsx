@@ -2,15 +2,16 @@ import React, { createContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { auth, firebase } from '../services/firebase';
 
-import { collection, setDoc, addDoc,doc, getDocs } from "firebase/firestore";
+import { collection, setDoc, doc, getDocs } from "firebase/firestore";
 
 import { database } from '../services/firebase'
+
+import history from '../history'
 
 const Context = createContext()
 
 function AuthProvider({ children }) {
 
-    const history = useHistory()
     const [user, setUser] = useState()
 
 
@@ -32,13 +33,8 @@ function AuthProvider({ children }) {
             const docRef = await setDoc(doc(userRef, `${user.id}`), {
                 name: user.name,
                 email: user.emaill,
-                decks: []
+                decks: [{}]
             });
-            // const docRef = await addDoc(collection(database, "users"), {
-            //     id: user.id,
-            //     name: user.name,
-            //     email: user.emaill
-            // });
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
             console.error("Error adding document: ", e);
@@ -93,8 +89,9 @@ function AuthProvider({ children }) {
     }
 
     function logout() {
-        firebase.auth().signOut()
-        history.push('/')
+        firebase.auth().signOut().then(() => {
+            history.push('/')
+        })
     }
 
     function isLoggedIn() {
@@ -148,6 +145,7 @@ function AuthProvider({ children }) {
                 alert("Login efetuado com sucesso")
             }
         }).then(() => {
+            history.push('/')
         })
     }
 

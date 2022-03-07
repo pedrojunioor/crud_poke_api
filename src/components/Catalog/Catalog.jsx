@@ -17,7 +17,7 @@ export function Catalog() {
     const { pokemons, next, previous, handleGetPokemons, handlePageNext, handlePagePrevious } = useContext(ContextPokedex)
     const [decks, setDecks] = useState([])
 
-    const [pokemonSend,setPokemonSend] = useState(undefined)
+    const [pokemonSend, setPokemonSend] = useState(undefined)
 
     const { user } = useContext(Context)
     const history = useHistory();
@@ -42,7 +42,7 @@ export function Catalog() {
     async function addDeck(pokemon, deck) {
 
         const user = await firebase.auth().currentUser;
-
+       
         try {
 
             const userRef = doc(database, "users", `${user.uid}`);
@@ -81,13 +81,29 @@ export function Catalog() {
     async function getDecks() {
 
         const user = await firebase.auth().currentUser;
-        console.log('UUUUu', user.uid)
-
         const docRef = doc(database, "users", `${user.uid}`);
         const docSnap = await getDoc(docRef);
+
         if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            setDecks(docSnap.data().decks)
+            if (docSnap.data().decks.length === 0) {
+                let decks = []
+                decks[0] = {
+                    deck1: []
+                }
+                setDecks(decks)
+            }
+            else {
+                let decks = docSnap.data().decks
+                let tam = 0
+                Object.keys(decks[0]).forEach(item => {
+                    tam += 1
+                })
+                decks[0] = {
+                    ...decks[0],
+                    [`deck${tam + 1}`]: []
+                }
+                setDecks(decks)
+            }
         } else {
             console.log("No such document!");
         }
@@ -101,32 +117,33 @@ export function Catalog() {
 
     const [deckSelected, setDeckSelected] = useState(undefined)
 
-    function showOptions(decks) {
-        return Object.entries(decks[0]).map(item => {
-            return <option value={`${item[0]}`}>{`${item[0]} QTD Atual: ${item[1].length}`}</option>
-        })
-    }
+   
 
-    function handleSendDeck(e,deck,pokemon){
+    function handleSendDeck(e, deck, pokemon) {
         e.preventDefault()
-        console.log(deck)
-        console.log(pokemon)
-
-        addDeck(pokemon, deck)
+        let deckSend = deck
+        if(deckSend === undefined){
+            deckSend = 'deck1'
+        }
+        addDeck(pokemon, deckSend)
         setPokemonSend(undefined)
         toggleModalAdd(e)
 
     }
+    function showOptions(decks) {
+        return Object.entries(decks[0]).map((item,i) => {
+            return <option key={i} value={`${item[0]}`}>{`${item[0]} QTD Atual: ${item[1].length}`}</option>
+        })
+    }
 
     function showDecks() {
-        return <form style={{display: 'flex',flexDirection: 'column'}} onSubmit={e => handleSendDeck(e,deckSelected,pokemonSend)}>
-                    <label htmlFor="deck-selected">Select Deck</label>
-                    <select id="deck-selected" value={deckSelected} onChange={(event) => { setDeckSelected(event.target.value) }}>
-                        {showOptions(decks)}
-                    </select>
-                    <button type="submit">Salvar</button>
-                </form>
-        {/* </div> */}
+        return <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={e => handleSendDeck(e, deckSelected, pokemonSend)}>
+            <label htmlFor="deck-selected">Select Deck</label>
+            <select id="deck-selected" value={deckSelected} onChange={(event) => { setDeckSelected(event.target.value) }}>
+                {showOptions(decks)}
+            </select>
+            <button type="submit">Salvar</button>
+        </form>
     }
 
     useEffect(() => {
@@ -157,6 +174,7 @@ export function Catalog() {
             </div>
             {showModalAdd && <ModalAdd closeModal={toggleModalAdd}>
                 {decks.length > 0 && showDecks()}
+                {/* {showDecks()} */}
             </ModalAdd>
 
             }
