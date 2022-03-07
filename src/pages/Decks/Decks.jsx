@@ -18,11 +18,13 @@ export function Decks() {
     const userId = params.id
 
     useEffect(() => {
-        // console.log
-        if (firebase.auth().currentUser !== undefined ) {
-
+        console.log('USER',firebase.auth().currentUser)
+        if (firebase.auth().currentUser !== null ) {
             if (firebase.auth().currentUser.uid !== userId) {
                 history.push('/')
+            }
+            else{
+                getDecks()
             }
         }
     }, [firebase.auth().currentUser, userId])
@@ -80,7 +82,6 @@ export function Decks() {
     function showDeck(deck) {
         return deck.map((item, i) => {
             return <div className="deck">
-
                 <Card pokemon={item} />
                 <Button estilo='btn5'>Remover do Deck</Button>
             </div>
