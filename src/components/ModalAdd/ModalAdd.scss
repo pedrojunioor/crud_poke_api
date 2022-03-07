@@ -1,4 +1,4 @@
-.modal{
+.modaladd{
     display: flex;
     flex-direction: column;
     padding: 12px;
@@ -7,10 +7,10 @@
     border-radius:20px;
     width: 400px;
     height:300px;
-    overflow-x:auto;
+    // overflow-x:auto;
     background:#000;
     // opacity: 0.9;
-    position:fixed;
+    position:absolute;
     top: 1;
-    margin-top:600px;
+    // margin-right:-600px;
 }

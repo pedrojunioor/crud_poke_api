@@ -4,7 +4,7 @@ import { Context } from '../../context/AuthContext'
 import { useHistory } from 'react-router-dom'
 import { Button } from '../Button/Button'
 import { Card } from '../Card/Card'
-import { Modal } from '../Modal/Modal'
+import { ModalAdd } from '../ModalAdd/ModalAdd'
 
 import { collection, doc, setDoc, addDoc, getDocs, getDoc, updateDoc } from "firebase/firestore";
 import { database, auth, firebase } from '../../services/firebase'
@@ -17,12 +17,14 @@ export function Catalog() {
     const { pokemons, next, previous, handleGetPokemons, handlePageNext, handlePagePrevious } = useContext(ContextPokedex)
     const [decks, setDecks] = useState([])
 
+    const [pokemonSend,setPokemonSend] = useState(undefined)
+
     const { user } = useContext(Context)
     const history = useHistory();
 
-    const [showModalAdd,setShowModalAdd] = useState(false)
+    const [showModalAdd, setShowModalAdd] = useState(false)
 
-    function toggleModalAdd(){
+    function toggleModalAdd() {
         setShowModalAdd(!showModalAdd)
     }
 
@@ -79,7 +81,7 @@ export function Catalog() {
     async function getDecks() {
 
         const user = await firebase.auth().currentUser;
-        console.log('UUUUu',user.uid)
+        console.log('UUUUu', user.uid)
 
         const docRef = doc(database, "users", `${user.uid}`);
         const docSnap = await getDoc(docRef);
@@ -91,22 +93,45 @@ export function Catalog() {
         }
     }
 
-    function chooseDeck(e,pokemon){
+    function chooseDeck(e, pokemon) {
+        setPokemonSend(pokemon)
         toggleModalAdd(e)
         getDecks()
-        let ArrayDecks = []
-        console.log('DECK', decks)
-        // if(de)
-        Object.entries(decks[0]).forEach(item => {
-            ArrayDecks.push(item[1])
+    }
+
+    const [deckSelected, setDeckSelected] = useState(undefined)
+
+    function showOptions(decks) {
+        return Object.entries(decks[0]).map(item => {
+            return <option value={`${item[0]}`}>{`${item[0]} QTD Atual: ${item[1].length}`}</option>
         })
-        console.log('AQUI',ArrayDecks)
-        
+    }
+
+    function handleSendDeck(e,deck,pokemon){
+        e.preventDefault()
+        console.log(deck)
+        console.log(pokemon)
+
+        addDeck(pokemon, deck)
+        setPokemonSend(undefined)
+        toggleModalAdd(e)
+
+    }
+
+    function showDecks() {
+        return <form style={{display: 'flex',flexDirection: 'column'}} onSubmit={e => handleSendDeck(e,deckSelected,pokemonSend)}>
+                    <label htmlFor="deck-selected">Select Deck</label>
+                    <select id="deck-selected" value={deckSelected} onChange={(event) => { setDeckSelected(event.target.value) }}>
+                        {showOptions(decks)}
+                    </select>
+                    <button type="submit">Salvar</button>
+                </form>
+        {/* </div> */}
     }
 
     useEffect(() => {
         console.log(showModalAdd)
-    },[showModalAdd])
+    }, [showModalAdd])
 
 
     function showPokemons() {
@@ -117,7 +142,7 @@ export function Catalog() {
                 </div>
                 {user && <div className="add-to-deck">
                     {/* <Button estilo='btn2' onClick={() => console.log('ADD',pokemon.url.split('/')[6])}>Add To Deck</Button> */}
-                    <Button estilo='btn2' onClick={e => {showModalAdd === false && chooseDeck(e,pokemon)}}>Add To Deck</Button>
+                    <Button estilo='btn2' onClick={e => { showModalAdd === false && chooseDeck(e, pokemon) }}>Add To Deck</Button>
                 </div>
                 }
             </div>
@@ -130,35 +155,11 @@ export function Catalog() {
             <div className="catalog-items">
                 {pokemons && showPokemons()}
             </div>
-            {showModalAdd &&
-                <Modal closeModal={e => toggleModalAdd(e)}>
-                    <div>
-                        dfldkflsdfdf
-                    </div>
-                    {/* <form className='form-login-cadastro' onSubmit={e => createAcount(e, email, password, name)}>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            value={name}
-                            onChange={e => setName(e.target.value)}
+            {showModalAdd && <ModalAdd closeModal={toggleModalAdd}>
+                {decks.length > 0 && showDecks()}
+            </ModalAdd>
 
-                        />
-                        <input
-                            type="text"
-                            placeholder="email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-
-                        />
-                        <input
-                            type="password"
-                            placeholder="password"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                        />
-                        <Button type="submit" estilo='btn4'>Cadastrar</Button>
-                    </form> */}
-                </Modal>}
+            }
             <div className="pagination">
                 {previous && <Button estilo='btn1' onClick={handlePagePrevious}> Previous  </Button>}
                 {next && <Button estilo='btn1' onClick={handlePageNext}> Next  </Button>}
