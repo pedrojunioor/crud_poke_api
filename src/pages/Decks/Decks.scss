@@ -9,6 +9,7 @@
     justify-content: center;
     text-align: center;
     flex-direction:column;
+    gap:20px
 }
 
 .card-layout{
@@ -24,7 +25,23 @@
     border-radius: 8px;
     padding:8px
 }
+
 .deck{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    border: 1px solid #000;
+    background: #000;
+    border-radius: 40px;
+    padding:8px;
+    gap:20px;
+    >h1 {
+        color: #fff
+    }
+}
+.deck-card{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -32,6 +49,6 @@
     gap: 10px;
     border: 1px solid #000;
     border-radius: 8px;
-    padding:8px;
     margin:0 4px;
+    padding:8px;
 }

@@ -6,29 +6,24 @@ import './Header.scss'
 
 import { Context } from '../../context/AuthContext'
 import { ContextPokedex } from '../../context/PokedexContext'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import googleIcon from '../../assets/images/google-icon.svg'
 import logo from "../../assets/images/logo.png"
 import { User } from '../../assets/images/User'
 
-
-
-
 import listPokemons from '../../mocks/listPokemons.json'
 import listAbility from '../../mocks/listAbility.json'
-import { auth } from "../../services/firebase";
+import history from "../../history"
 
 export function Header(home) {
 
-    const history = useHistory()
+
     const { user, sigInWithGoogle, logout, handleNewAccount, handleLoginWithEmailAndPassword } = useContext(Context)
     const [filter, setFilter] = useState('name')
-
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [loading, setLoading] = useState(false)
-
+  
     function toggleModal(e) {
         e.preventDefault()
         setShowModal(!showModal)
@@ -119,7 +114,6 @@ export function Header(home) {
 
     function createAcount(e, email, password, name) {
         handleNewAccount(e, email, password, name)
-        console.log(user)
         setName('')
         setEmail('')
         setPassword('')
@@ -133,6 +127,10 @@ export function Header(home) {
         setPassword('')
     }
 
+    function goToDecks() {
+        history.push(`/${user.id}/decks`)
+    }
+
 
     return (
         <div className="header">
@@ -143,10 +141,6 @@ export function Header(home) {
                         <img src={logo} />
                     </div>
                 </Link>
-                {user &&
-
-                    <Link to={`/${user.id}/decks`}>Deck</Link>
-                }
             </div>
             {home.home &&
                 <div className='input-radio'>
@@ -210,18 +204,22 @@ export function Header(home) {
                             {user && <div className="user">
                                 <img src={user?.avatar} alt="" />
                                 <span>{user?.name}</span>
+                                {/* <Link to={`/${user.id}/decks`}>Meus Decks</Link> */}
+                                <Button estilo='btn3' onClick={() => goToDecks()}>Meus Decks</Button>
+                                <Button
+                                    estilo='btn1'
+                                    // className="login-button"
+                                    onClick={singOut}>
+                                    {/* <img src={googleIcon} alt="Logo do Google" /> */}
+                                    Logout
+                                </Button>
                             </div>}
+
                             {!user && <button
                                 className="login-button"
                                 onClick={singIn}>
                                 <img src={googleIcon} alt="Logo do Google" />
                                 LOGIN
-                            </button>}
-                            {user && <button
-                                className="login-button"
-                                onClick={singOut}>
-                                <img src={googleIcon} alt="Logo do Google" />
-                                Logout
                             </button>}
                         </div>
                     </div>

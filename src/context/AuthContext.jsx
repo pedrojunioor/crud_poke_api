@@ -113,7 +113,6 @@ function AuthProvider({ children }) {
             .then(async () => {
                 alert("Conta criada com sucesso")
                 let emails = await getUsers()
-                console.log('emails', emails)
 
                 if (!(emails.includes(`${email}`))) {
                     const user = firebase.auth().currentUser;

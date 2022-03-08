@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
-import { collection, doc, setDoc, addDoc, getDocs, getDoc, query, where } from "firebase/firestore";
+import { collection, doc, setDoc, addDoc, updateDoc, getDocs, getDoc, query, where } from "firebase/firestore";
 import { database, auth, firebase } from '../../services/firebase'
 
 import { Card } from '../../components/Card/Card'
@@ -15,15 +15,25 @@ export function Decks() {
     const params = useParams()
     const history = useHistory()
 
+    function isEquals(obj1, obj2) {
+        if (obj1.url === obj2.url && obj1.name === obj2.name) {
+            return true;
+        };
+        return false;
+    }
+
+    function pertence(item, arrayy) {
+        return arrayy.some((element) => isEquals(item, element));
+    }
+
     const userId = params.id
 
     useEffect(() => {
-        console.log('USER',firebase.auth().currentUser)
-        if (firebase.auth().currentUser !== null ) {
+        if (firebase.auth().currentUser !== null) {
             if (firebase.auth().currentUser.uid !== userId) {
                 history.push('/')
             }
-            else{
+            else {
                 getDecks()
             }
         }
@@ -31,12 +41,12 @@ export function Decks() {
 
     const [decks, setDecks] = useState([])
 
-    function handleDecks(data) {
-        setDecks([
-            ...decks,
-            data
-        ])
-    }
+    // function handleDecks(data) {
+    //     setDecks([
+    //         ...decks,
+    //         data
+    //     ])
+    // }
 
     useEffect(() => {
         getDecks()
@@ -53,37 +63,79 @@ export function Decks() {
         }
     }
 
-    function showDecksNaTela(decks) {
-        let ArrayDecks = []
-        Object.entries(decks[0]).forEach(item => {
-            ArrayDecks.push(item[1])
+    function handleDeleteFromDeck(e, deck, item) {
+        e.preventDefault();
+        console.log('deck', deck)
+        let novoDeck = deck.filter(ele => {
+            if (!isEquals(item, ele)) {
+                return item
+            }
         })
-        if (ArrayDecks.length > 0) {
-            return ArrayDecks.map((item, i) => {
-                if (item.length > 0) {
-                    return <div className="card-layout">
-                        <div style={{ marginBottom: '20px' }}>
-                            <h1>{`Deck ${i + 1}`}</h1>
+        console.log('novoDeck', novoDeck)
+    }
 
-                        </div>
-                        <div className="deck" >
-                            <div style={{ display: 'flex', flexWrap: "wrap" }}>
-                                {showDeck(item)}
-                            </div>
-                            <Button estilo='btn5'>EXCLUIR DECK</Button>
-                        </div>
-                    </div>
-                }
+    async function handleDeleteDeck(e, decks, item) {
+        e.preventDefault();
+        if (window.confirm(`Você realmente quer excluir o ${item[0]}`)) {
 
-            })
+            const user = firebase.auth().currentUser
+            if (user !== null) {
+                console.log(user.email)
+                const q = query(collection(database, "users"), where("email", "==", user.email));
+                const docSnap = await getDocs(q);
+
+                let novoPack = [{}]
+
+                console.log('novoPack->', novoPack)
+
+                Object.entries(decks[0]).filter(deck => {
+                    if ((deck[0].toString() !== item[0].toString())) {
+                        let temp = deck[1]
+                        novoPack[0] = {
+                            ...novoPack[0],
+                            [`${deck[0]}`]: temp
+                        }
+
+                    }
+                })
+
+                console.log('novoPackAtualizado', novoPack)
+
+                const userRefAdd = collection(database, "users")
+                const docRef = await updateDoc(doc(userRefAdd, `${user.uid}`), {
+                    decks: novoPack
+                });
+                setDecks(novoPack)
+            }
         }
+
+    }
+
+    function showDecksNaTela(decks) {
+        return Object.entries(decks[0]).map((item, i) => {
+            return <div key={i} className="deck">
+
+                <h1>{item[0]}</h1>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                    {showDeck(item[1])}
+                </div>
+                <Button
+                    estilo='btn5'
+                    onClick={e => handleDeleteDeck(e, decks, item)}
+                >Excluir Deck</Button>
+            </div>
+        })
     }
 
     function showDeck(deck) {
         return deck.map((item, i) => {
-            return <div className="deck">
+            return <div className="deck-card">
                 <Card pokemon={item} />
-                <Button estilo='btn5'>Remover do Deck</Button>
+                <Button
+                    estilo='btn5'
+                    onClick={e => handleDeleteFromDeck(e, deck, item)}
+                >Remover do Deck</Button>
             </div>
         })
 
@@ -94,6 +146,7 @@ export function Decks() {
             <Header home={false} />
             <div >
                 <div className="decks">
+                    {console.log('------>',decks)}
                     {decks.length > 0 ?
                         showDecksNaTela(decks) :
                         <h1>Você ainda não possui nenhum Deck</h1>}

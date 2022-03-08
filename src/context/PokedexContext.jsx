@@ -45,7 +45,6 @@ function PokedexContext({ children }) {
         else {
             let pokemon = []
             api.get('pokemon/' + string).then(result => {
-                console.log('RESULTADO', result.data)
                 pokemon.push({
                     name: result.data.name,
                     url: 'https://pokeapi.co/api/v2/pokemon/' + result.data.id + '/'
@@ -71,7 +70,6 @@ function PokedexContext({ children }) {
             })
         } else {
             api.get('ability/' + string).then(result => {
-                console.log('RESULTADO', result.data.pokemon)
                 let pokemons = result.data.pokemon.map(item => {
                     return item.pokemon
                 })

@@ -146,11 +146,6 @@ export function Catalog() {
         </form>
     }
 
-    useEffect(() => {
-        console.log(showModalAdd)
-    }, [showModalAdd])
-
-
     function showPokemons() {
         return pokemons.map((pokemon, i) => {
             return <div key={i} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -158,7 +153,6 @@ export function Catalog() {
                     <Card pokemon={pokemon}></Card>
                 </div>
                 {user && <div className="add-to-deck">
-                    {/* <Button estilo='btn2' onClick={() => console.log('ADD',pokemon.url.split('/')[6])}>Add To Deck</Button> */}
                     <Button estilo='btn2' onClick={e => { showModalAdd === false && chooseDeck(e, pokemon) }}>Add To Deck</Button>
                 </div>
                 }

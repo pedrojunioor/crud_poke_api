@@ -125,7 +125,7 @@
     background: red;
 
     height: 40px;
-    // width: 100px;
+    width: 100px;
 
     color: white;
     display: flex;
@@ -157,6 +157,7 @@ a {
     align-items: center;
     // border: 2px solid #ccc;
     border-radius: 5%;
+    gap: 10px;
 
     > img {
         border: 2px solid #ccc;
