@@ -10,7 +10,7 @@ export function Modal({ children, closeModal }) {
             <div>
                 <Button estilo='btn2' onClick={e =>  closeModal(e) }>X</Button>
             </div>
-            <div >
+            <div className='content'>
                 {children}
             </div>
         </div>

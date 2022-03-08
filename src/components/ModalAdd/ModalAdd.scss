@@ -7,10 +7,11 @@
     border-radius:20px;
     width: 400px;
     height:300px;
-    // overflow-x:auto;
     background:#000;
-    // opacity: 0.9;
     position:absolute;
     top: 1;
-    // margin-right:-600px;
+}
+
+.content{
+    z-index: 100000;
 }

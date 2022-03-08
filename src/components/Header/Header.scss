@@ -54,9 +54,6 @@
 .login-area {
     margin-right: 160px;
     margin-left: auto;
-    // justify-content: center;
-    // align-items: center;
-
     
     .card-user {
         display: none;
@@ -64,7 +61,6 @@
         border-radius:20px;
         background-color: #000;
         opacity: 0.9;
-   
 
         .form-login{
             display: flex;
@@ -89,15 +85,15 @@
 
     &:hover {
         .card-user {
+            width:245px;
             display: flex;
             flex-direction: column;
             gap: 10px;
             padding: 20px;
             position: fixed;
             margin-top: 25px;
-            margin-left: -100px;
-            top: 1;
-            left: 2;
+            margin-left: -110px;
+
         }
     }
 }
@@ -155,7 +151,6 @@ a {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // border: 2px solid #ccc;
     border-radius: 5%;
     gap: 10px;
 
@@ -186,6 +181,7 @@ a {
 .input-radio{
     display: flex;
     flex-direction: column;
+    gap: 5px;
     margin-right:20px
 }
 
@@ -193,32 +189,34 @@ a {
     .header {
         display: flex;
         flex-direction: column;
-        // justify-content: space-around;
-        margin: 10px 20px;
-        padding: 20px;
-        align-items: center;
+
+        .login-area{
+            margin: 0;
+        }
+        justify-content:center;
+        align-items:center;
     }
 
     .input-radio{
-        display: flex;
         flex-direction: row;
-        margin-bottom:20px
+        margin-bottom:20px;
+    }
+
+    .input-area{
+        display: flex;
+        flex-direction: column
     }
 
     .user-area{
         display: flex;
         margin-left: -1000;
         order: -1
-
     }
 
 }
 
 @media(max-width: 425px){
-    .header{
-        justify-content:center;
-        align-items:center;
-    }
+
     .input-area{
         display: flex;
         flex-direction: column

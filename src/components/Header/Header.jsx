@@ -144,7 +144,7 @@ export function Header(home) {
             </div>
             {home.home &&
                 <div className='input-radio'>
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <label htmlFor="name">Name</label>
                         <input
                             id="name"
@@ -153,7 +153,7 @@ export function Header(home) {
                             checked={filter === 'name' ? true : false} />
 
                     </div>
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex',justifyContent: 'center', alignItems: 'center' }}>
                         <label htmlFor="ability-input">Ability</label>
                         <input
                             id="ability-input"
