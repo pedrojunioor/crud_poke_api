@@ -73,3 +73,14 @@
     padding: 8px;
     overflow-y: scroll; 
 }
+
+@media(max-width:560px){
+    .card-area{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .card-details{
+        margin-left:0;
+    }
+}
