@@ -25,8 +25,6 @@ function AuthProvider({ children }) {
     }
 
     async function persistUser(user) {
-        console.log(user)
-
         try {
             const userRef = collection(database, "users")
 

@@ -63,15 +63,40 @@ export function Decks() {
         }
     }
 
-    function handleDeleteFromDeck(e, deck, item) {
+    async function handleDeleteFromDeck(e, deck, item,ref) {
         e.preventDefault();
-        console.log('deck', deck)
-        let novoDeck = deck.filter(ele => {
-            if (!isEquals(item, ele)) {
-                return item
+        if (window.confirm(`Tem certeza que quer excluir esta carta do ${ref}?`)) {
+
+            const user = firebase.auth().currentUser
+            if (user !== null) {
+                const q = query(collection(database, "users"), where("email", "==", user.email));
+                const docSnap = await getDocs(q);
+
+                let novoDeck = deck.filter(ele => {
+                    if (!isEquals(item, ele)) {
+                        return item
+                    }
+                })
+
+                let novoPack = decks[0]
+                Object.entries(decks[0]).filter(deck => {
+                    if ((deck[0].toString() === ref)) {
+                        novoPack[`${ref}`] = novoDeck
+                    }
+                })
+                let decksSend = []
+                decksSend.push(novoPack)
+
+                const userRefAdd = collection(database, "users")
+                const docRef = await updateDoc(doc(userRefAdd, `${user.uid}`), {
+                    decks: decksSend
+                });
+                setDecks(decksSend)
+
             }
-        })
-        console.log('novoDeck', novoDeck)
+        }
+
+
     }
 
     async function handleDeleteDeck(e, decks, item) {
@@ -80,13 +105,11 @@ export function Decks() {
 
             const user = firebase.auth().currentUser
             if (user !== null) {
-                console.log(user.email)
+
                 const q = query(collection(database, "users"), where("email", "==", user.email));
                 const docSnap = await getDocs(q);
 
                 let novoPack = [{}]
-
-                console.log('novoPack->', novoPack)
 
                 Object.entries(decks[0]).filter(deck => {
                     if ((deck[0].toString() !== item[0].toString())) {
@@ -98,8 +121,6 @@ export function Decks() {
 
                     }
                 })
-
-                console.log('novoPackAtualizado', novoPack)
 
                 const userRefAdd = collection(database, "users")
                 const docRef = await updateDoc(doc(userRefAdd, `${user.uid}`), {
@@ -118,7 +139,7 @@ export function Decks() {
                 <h1>{item[0]}</h1>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                    {showDeck(item[1])}
+                    {showDeck(item[0],item[1])}
                 </div>
                 <Button
                     estilo='btn5'
@@ -128,13 +149,13 @@ export function Decks() {
         })
     }
 
-    function showDeck(deck) {
+    function showDeck(ref,deck) {
         return deck.map((item, i) => {
             return <div className="deck-card">
                 <Card pokemon={item} />
                 <Button
                     estilo='btn5'
-                    onClick={e => handleDeleteFromDeck(e, deck, item)}
+                    onClick={e => handleDeleteFromDeck(e, deck, item,ref)}
                 >Remover do Deck</Button>
             </div>
         })
@@ -146,7 +167,6 @@ export function Decks() {
             <Header home={false} />
             <div >
                 <div className="decks">
-                    {console.log('------>',decks)}
                     {decks.length > 0 ?
                         showDecksNaTela(decks) :
                         <h1>Você ainda não possui nenhum Deck</h1>}
