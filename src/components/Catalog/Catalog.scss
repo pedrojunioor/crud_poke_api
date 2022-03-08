@@ -24,28 +24,18 @@
 }
 
 @media(max-width: 425px){
-    .catalog{
-        margin: 10px;
+    .logo-area{
+        margin: auto;
+    }
+    .login-area{
+        margin: auto;
     }
 }
 
-.dfd{
-    // display: flex;
-    flex-direction: column;
-    padding: 12px;
-    
-    // z-index: 100000;
-    border: 1px solid #000;
-    border-radius:20px;
-    width: 400px;
-    height:300px;
-    overflow-x:auto;
-    // background:#000;
-    // opacity: 0.9;
-    // position:fixed;
-    // top: 1;
-    // margin-top:600px;
-    
+#deck-selected{
+    height:40px;
+    border-radius: 8px;
+    padding:8px;
 }
 
 .deck-to-choose{

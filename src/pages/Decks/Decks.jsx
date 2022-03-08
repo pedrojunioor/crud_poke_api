@@ -138,7 +138,7 @@ export function Decks() {
 
                 <h1>{item[0]}</h1>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
                     {showDeck(item[0],item[1])}
                 </div>
                 <Button

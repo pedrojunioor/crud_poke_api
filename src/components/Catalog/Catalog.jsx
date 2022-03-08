@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ContextPokedex } from '../../context/PokedexContext'
 import { Context } from '../../context/AuthContext'
 import { useHistory } from 'react-router-dom'
@@ -6,15 +6,15 @@ import { Button } from '../Button/Button'
 import { Card } from '../Card/Card'
 import { ModalAdd } from '../ModalAdd/ModalAdd'
 
-import { collection, doc, setDoc, addDoc, getDocs, getDoc, updateDoc } from "firebase/firestore";
-import { database, auth, firebase } from '../../services/firebase'
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { database,firebase } from '../../services/firebase'
 
 import './Catalog.scss';
 
 
 export function Catalog() {
 
-    const { pokemons, next, previous, handleGetPokemons, handlePageNext, handlePagePrevious } = useContext(ContextPokedex)
+    const { pokemons, next, previous, handlePageNext, handlePagePrevious } = useContext(ContextPokedex)
     const [decks, setDecks] = useState([])
 
     const [pokemonSend, setPokemonSend] = useState(undefined)
@@ -137,12 +137,12 @@ export function Catalog() {
     }
 
     function showDecks() {
-        return <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={e => handleSendDeck(e, deckSelected, pokemonSend)}>
+        return <form style={{ display: 'flex', flexDirection: 'column', gap:'30px', justifyContent: 'center', alignItems: 'center'}} onSubmit={e => handleSendDeck(e, deckSelected, pokemonSend)}>
             <label htmlFor="deck-selected">Select Deck</label>
             <select id="deck-selected" value={deckSelected} onChange={(event) => { setDeckSelected(event.target.value) }}>
                 {showOptions(decks)}
             </select>
-            <button type="submit">Salvar</button>
+            <Button estilo='btn4' type="submit">Adicionar</Button>
         </form>
     }
 
