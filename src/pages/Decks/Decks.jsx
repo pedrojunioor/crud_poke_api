@@ -135,9 +135,7 @@ export function Decks() {
     function showDecksNaTela(decks) {
         return Object.entries(decks[0]).map((item, i) => {
             return <div key={i} className="deck">
-
-                <h1>{item[0]}</h1>
-
+                <h1 style={{textTransform: 'uppercase'}}>{item[0]}</h1>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
                     {showDeck(item[0],item[1])}
                 </div>
