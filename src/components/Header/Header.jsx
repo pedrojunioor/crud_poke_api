@@ -145,7 +145,7 @@ export function Header(home) {
             {home.home &&
                 <div className='input-radio'>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name"><span>Name</span></label>
                         <input
                             id="name"
                             type="radio"
@@ -154,7 +154,7 @@ export function Header(home) {
 
                     </div>
                     <div style={{ display: 'flex',justifyContent: 'center', alignItems: 'center' }}>
-                        <label htmlFor="ability-input">Ability</label>
+                        <label htmlFor="ability-input"><span>Ability</span> </label>
                         <input
                             id="ability-input"
                             type="radio"

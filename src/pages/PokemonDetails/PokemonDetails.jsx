@@ -8,8 +8,7 @@ import api from '../../config/api'
 
 import './PokemonDetails.scss'
 
-import { Button } from '../../components/Button/Button'
-
+import {Card} from '../../components/Card/Card'
 
 export function PokemonDetails() {
 
@@ -26,36 +25,26 @@ export function PokemonDetails() {
         })
     }, [params])
 
-    function showAbilities(abilities) {
-        let temp = ''
-        abilities.forEach((item, i) => {
-            if (i === 0) {
-                temp += item.ability.name
-            }
-            else {
-                temp += ', ' + item.ability.name
-            }
-        })
+    // function showAbilities(abilities) {
+    //     let temp = ''
+    //     abilities.forEach((item, i) => {
+    //         if (i === 0) {
+    //             temp += item.ability.name
+    //         }
+    //         else {
+    //             temp += ', ' + item.ability.name
+    //         }
+    //     })
 
-        return <h4>{temp}</h4>
-    }
+    //     return <h4>{temp}</h4>
+    // }
 
     return (
         <div>
             <Header home={false} />
             {pokemonSelected !== undefined &&
-                <div class="cardd">
-                    <div class="card-border-top">
-                    </div>
-                    <div class="img">
-                        <img src={pokemonSelected.sprites.front_default} alt="" />
-                    </div>
-                    <span> {pokemonSelected.name}</span>
-                    <p class="job"> {showAbilities(pokemonSelected.abilities)}</p>
-                    <Button> Adicionar a um Deck </Button>
-                </div>
+                <Card pokemon={pokemonSelected} details={true}></Card>
             }
-
         </div>
     )
 }

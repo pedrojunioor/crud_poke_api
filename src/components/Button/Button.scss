@@ -55,7 +55,8 @@
 
     &:hover {
         color: #e8e8e8;
-        background-color: #212121;
+        background-color: #27079b;
+        border: 1px solid #fff
     }
 
     &:hover::before {
@@ -106,14 +107,15 @@
     transition: background box-shadow 280ms ease;
 
     &:hover {
-        background: #000;
+        background: #27079b;
         color: #fff;
+        border: 1px solid #fff;
     }
 
     &:active {
         box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
         outline: none;
-        border: 2px solid #4285f4;
+        border: 2px solid #27079b;
     }
 }
 

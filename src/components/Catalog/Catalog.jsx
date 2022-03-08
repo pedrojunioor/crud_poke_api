@@ -137,8 +137,8 @@ export function Catalog() {
     }
 
     function showDecks() {
-        return <form style={{ display: 'flex', flexDirection: 'column', gap:'30px', justifyContent: 'center', alignItems: 'center'}} onSubmit={e => handleSendDeck(e, deckSelected, pokemonSend)}>
-            <label htmlFor="deck-selected">Select Deck</label>
+        return <form className='form-add' onSubmit={e => handleSendDeck(e, deckSelected, pokemonSend)}>
+            <label htmlFor="deck-selected"><span>Selecione o Deck</span></label>
             <select id="deck-selected" value={deckSelected} onChange={(event) => { setDeckSelected(event.target.value) }}>
                 {showOptions(decks)}
             </select>
@@ -149,8 +149,9 @@ export function Catalog() {
     function showPokemons() {
         return pokemons.map((pokemon, i) => {
             return <div key={i} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                {/* <div onClick={() => history.push(`/pokemon/${pokemon.url.split('/')[6]}`)}> */}
                 <div onClick={() => history.push(`/pokemon/${pokemon.url.split('/')[6]}`)}>
-                    <Card pokemon={pokemon}></Card>
+                    <Card pokemon={pokemon} details={false}></Card>
                 </div>
                 {user && <div className="add-to-deck">
                     <Button estilo='btn2' onClick={e => { showModalAdd === false && chooseDeck(e, pokemon) }}>Add To Deck</Button>
@@ -168,7 +169,6 @@ export function Catalog() {
             </div>
             {showModalAdd && <ModalAdd closeModal={toggleModalAdd}>
                 {decks.length > 0 && showDecks()}
-                {/* {showDecks()} */}
             </ModalAdd>
 
             }
